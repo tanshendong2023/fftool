@@ -2601,7 +2601,67 @@ class system(object):
             f.write('venergygrps           = System        ; 定义能量组\n')
 
 
-        with open('run.mdp', 'w') as f:
+        with open('npt.mdp', 'w') as f:
+            f.write('; RUN CONTROL PARAMETERS =\n\n')
+        
+            f.write('integrator            = md            ; md integrator\n')
+            f.write('tinit                 = 5000          ; [ps] starting time for run\n')
+            f.write('dt                    = 0.001         ; [ps] time step for integration\n')
+            f.write('nsteps                = 40000000      ; maximum number of steps to integrate\n')
+            f.write('comm-mode             = Linear        ; Remove center of mass translation\n\n')
+        
+            f.write('; OUTPUT CONTROL OPTIONS =\n')
+            f.write('nstxout               = 25000         ; [steps] freq to write coordinates to trajectory\n')
+            f.write('nstvout               = 25000         ; [steps] freq to write velocities to trajectory\n')
+            f.write('nstfout               = 25000         ; [steps] freq to write forces to trajectory\n')
+            f.write('nstlog                = 2000          ; [steps] freq to write energies to log file\n')
+            f.write('nstenergy             = 10000         ; group(s) to write to energy file\n')
+            f.write('nstxout-compressed    = 10000         ; freq to write coordinates to xtc trajectory\n\n')
+        
+            f.write('; NEIGHBORSEARCHING PARAMETERS =\n')
+            f.write('cutoff-scheme         = verlet        ; This option has an explicit, exact cut-off at rvdw=rcoulomb.\n')
+            f.write('nstlist               = 20            ; [steps] freq to update neighbor list\n')
+            f.write('ns_type               = grid          ; method of updating neighbor list\n')
+            f.write('pbc                   = xyz           ; periodic boundary conditions in all directions\n')
+            f.write('rlist                 = 1.3           ; [nm] cut-off distance for the short-range neighbor list\n')
+            f.write('verlet-buffer-tolerance = 0.005       ; sets the maximum allowed error for pair interactions per particle. Indirectly sets rlist\n\n')
+        
+            f.write('; OPTIONS FOR ELECTROSTATICS AND VDW =\n')
+            f.write('coulombtype           = PME           ; Particle-Mesh Ewald electrostatics\n')
+            f.write('rcoulomb              = 1.3           ; [nm] distance for Coulomb cut-off\n')
+            f.write('vdw_type              = PME           ; twin-range cut-off with rlist where rvdw >= rlist\n')
+            f.write('rvdw                  = 1.3           ; [nm] distance for LJ cut-off\n')
+            f.write('fourierspacing        = 0.15          ; [nm] grid spacing for FFT grid when using PME\n')
+            f.write('pme_order             = 4             ; interpolation order for PME, 4 = cubic\n')
+            f.write('ewald_rtol            = 1e-05         ; relative strength of Ewald-shifted potential at rcoulomb\n\n')
+        
+            f.write('; OPTIONS FOR WEAK COUPLING ALGORITHMS =\n')
+            f.write('tcoupl                = v-rescale     ; temperature coupling method\n')
+            f.write('tc-grps               = System        ; groups to couple seperately to temperature bath\n')
+            f.write('tau_t                 = 1.0           ; [ps] time constant for coupling\n')
+            f.write('ref_t                 = 298.15        ; reference temperature for coupling\n')
+            f.write('Pcoupl                = Berendsen     ; pressure coupling method\n')
+            f.write('Pcoupltype            = isotropic     ; pressure coupling in x-y-z directions\n')
+            f.write('tau_p                 = 1.0           ; [ps] time constant for coupling\n')
+            f.write('compressibility       = 4.5e-5        ; [bar^-1] compressibility\n')
+            f.write('ref_p                 = 1.0 ; bar     ; reference pressure for coupling\n\n')
+        
+            f.write('; GENERATE VELOCITIES FOR STARTUP RUN =\n')
+            f.write('gen_vel               = no      ; velocity generation turned on\n\n')
+        
+            f.write('; OPTIONS FOR BONDS =\n')
+            f.write('constraints           = hbonds\n')
+            f.write('constraint_algorithm  = lincs\n')
+            f.write('unconstrained_start   = no\n')
+            f.write('shake_tol             = 0.00001\n')
+            f.write('lincs_order           = 4\n')
+            f.write('lincs_warnangle       = 30\n')
+            f.write('morse                 = no\n')
+            f.write('lincs_iter            = 2\n\n')
+
+        with open('npt.mdp', 'w') as f:
+            
+
             f.write('integrator            = sd; md\n')
             f.write('dt                    = 0.001\n')
             f.write('nsteps                = 10000\n\n')
@@ -2974,7 +3034,7 @@ def main():
         sim.writecharmm(args.mix, args.allpairs)
     if args.gmx:
         sim.readcoords('simbox.xyz')
-        print('gromacs files\n  em.mdp\n  run.mdp\n  field.top\n  config.pdb')
+        print('gromacs files\n  em.mdp\n  npt.mdp\n  field.top\n  config.pdb')
         sim.writegmx(args.mix)
     if args.dlpoly:
         sim.readcoords('simbox.xyz')
