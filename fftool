@@ -2583,42 +2583,22 @@ class system(object):
             f.write('title                 = Minimization  ; 标题\n')
             f.write('define                = -DFLEXIBLE    ; 如果需要，定义某些预处理变量\n\n')
             
-            f.write('integrator            = sd; md\n')
-            f.write('dt                    = 0.001\n')
-            f.write('nsteps                = 10000\n\n')
-            
-            f.write('nstlog                = 1000\n')
-            f.write('nstxout-compressed    = 1000\n\n')
+            f.write('integrator            = steep         ; 使用最速下降法进行能量极小化\n')
+            f.write('emtol                 = 1000.0        ; 停止极小化的能量容差(kJ/mol/nm)\n')
+            f.write('emstep                = 0.01          ; 极小化步长\n')
+            f.write('nsteps                = 50000         ; 最大步数\n\n')
 
-            f.write('cutoff-scheme         = Verlet\n')
-            f.write('rlist                 = 1.2\n')
-            f.write('pbc                   = xyz\n\n')
+            f.write('n; 电荷和范德华力参数\n')
+            f.write('nnstlist              = 1             ; 更新邻居列表的频率\n')
+            f.write('ncutoff-scheme        = Verlet        ; 截断方案\n')
+            f.write('cns_type              = grid          ; 使用格点搜索邻居\n')
+            f.write('rlist                 = 1.0           ; 截断半径，单位是纳米\n')
+            f.write('coulombtype           = PME           ; 库仑相互作用处理方法\n')
+            f.write('rcoulomb              = 1.0           ; 库仑截断半径\n')
+            f.write('rrvdw                 = 1.0           ; 范德华截断半径\n\n')
 
-            f.write('coulombtype           = PME\n')
-            f.write('rcoulomb              = 1.2\n')
-            f.write('ewald-rtol            = 1.0e-5\n')
-            f.write('vdwtype               = Cut-off\n')
-            f.write('rvdw                  = 1.2\n')
-            f.write('DispCorr              = EnerPres\n\n')
-
-            f.write('tcoupl                = no; V-rescale\n')
-            f.write('tc-grps               = System\n')
-            f.write('tau-t                 = 1.0; 0.1\n')
-            f.write('ref-t                 = 300.0\n\n')
-
-            f.write('pcoupl                = Berendsen; Parrinello-Rahman\n')
-            f.write('pcoupltype            = isotropic\n')
-            f.write('tau-p                 = 0.5; 5.0\n')
-            f.write('ref-p                 = 1.0\n')
-            f.write('compressibility       = 4.5e-5\n')
-
-            f.write('gen-vel               = yes\n')
-            f.write('gen-temp              = 300\n')
-            f.write('gen-seed              = -1\n\n')
-
-            f.write('constraints           = h-bonds\n')
-            f.write('constraint-algorithm  = LINCS\n')
-            f.write('continuation          = no\n\n')
+            f.write('; 输出控制\n')
+            f.write('venergygrps           = System        ; 定义能量组\n')
 
 
         with open('run.mdp', 'w') as f:
@@ -2994,7 +2974,7 @@ def main():
         sim.writecharmm(args.mix, args.allpairs)
     if args.gmx:
         sim.readcoords('simbox.xyz')
-        print('gromacs files\n  run.mdp\n  field.top\n  config.pdb')
+        print('gromacs files\n  em.mdp\n  run.mdp\n  field.top\n  config.pdb')
         sim.writegmx(args.mix)
     if args.dlpoly:
         sim.readcoords('simbox.xyz')
