@@ -2577,6 +2577,50 @@ class system(object):
 
         self.writepdb()
 
+        with open('em.mdp', 'w') as f:
+            f.write('; minim.mdp - used as input into grompp to generate em.tpr\n')
+            f.write('; Parameters for energy minimization\n\n')
+            f.write('title                 = Minimization  ; 标题\n')
+            f.write('define                = -DFLEXIBLE    ; 如果需要，定义某些预处理变量\n\n')
+            
+            f.write('integrator            = sd; md\n')
+            f.write('dt                    = 0.001\n')
+            f.write('nsteps                = 10000\n\n')
+            
+            f.write('nstlog                = 1000\n')
+            f.write('nstxout-compressed    = 1000\n\n')
+
+            f.write('cutoff-scheme         = Verlet\n')
+            f.write('rlist                 = 1.2\n')
+            f.write('pbc                   = xyz\n\n')
+
+            f.write('coulombtype           = PME\n')
+            f.write('rcoulomb              = 1.2\n')
+            f.write('ewald-rtol            = 1.0e-5\n')
+            f.write('vdwtype               = Cut-off\n')
+            f.write('rvdw                  = 1.2\n')
+            f.write('DispCorr              = EnerPres\n\n')
+
+            f.write('tcoupl                = no; V-rescale\n')
+            f.write('tc-grps               = System\n')
+            f.write('tau-t                 = 1.0; 0.1\n')
+            f.write('ref-t                 = 300.0\n\n')
+
+            f.write('pcoupl                = Berendsen; Parrinello-Rahman\n')
+            f.write('pcoupltype            = isotropic\n')
+            f.write('tau-p                 = 0.5; 5.0\n')
+            f.write('ref-p                 = 1.0\n')
+            f.write('compressibility       = 4.5e-5\n')
+
+            f.write('gen-vel               = yes\n')
+            f.write('gen-temp              = 300\n')
+            f.write('gen-seed              = -1\n\n')
+
+            f.write('constraints           = h-bonds\n')
+            f.write('constraint-algorithm  = LINCS\n')
+            f.write('continuation          = no\n\n')
+
+
         with open('run.mdp', 'w') as f:
             f.write('integrator            = sd; md\n')
             f.write('dt                    = 0.001\n')
