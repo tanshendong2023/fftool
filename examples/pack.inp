@@ -1,0 +1,14 @@
+# created by fftool
+tolerance 2.5
+filetype xyz
+output simbox.xyz
+
+structure ethanol_pack.xyz
+  number 40
+  inside box 1.5000 1.5000 1.5000 23.0839 23.0839 23.0839
+end structure
+
+structure spce_pack.xyz
+  number 300
+  inside box 1.5000 1.5000 1.5000 23.0839 23.0839 23.0839
+end structure
