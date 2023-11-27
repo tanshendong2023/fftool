@@ -2771,7 +2771,7 @@ class system(object):
             f.write('; Groups to couple separately\n')
             f.write('tc-grps               = System\n')
             f.write('; Time constant and reference temperature\n')
-            f.write('tau_t                 = 0.2\n')
+            f.write('tau_t                 = 0.5\n')
             f.write('ref_t                 = 298.15\n')
             f.write('; Pressure coupling\n')
             f.write('Pcoupl                = no\n')
@@ -2779,7 +2779,7 @@ class system(object):
             f.write('; Time constant, compressibility and reference P\n')
             f.write('tau_p                 = 0.5\n')
             f.write('compressibility       = 4.5e-5\n')
-            f.write('ref_p                 = 1.\n')
+            f.write('ref_p                 = 1.0\n')
             f.write('refcoord_scaling      = com\n\n')
 
             f.write('; GENERATE VELOCITIES FOR STARTUP RUN =\n')
